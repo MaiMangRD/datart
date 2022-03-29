@@ -39,17 +39,20 @@ const ShareLinkModal: FC<{
   onGenerateShareLink?: (
     date,
     usePwd,
-  ) => { password?: string; token?: string; usePassword?: boolean };
+    hideHeader
+  ) => { password?: string; token?: string; usePassword?: boolean, hideHeader: boolean };
   onOk?;
   onCancel?;
 }> = memo(({ visibility, onGenerateShareLink, onOk, onCancel }) => {
   const t = useI18NPrefix(`viz.action`);
   const [expireDate, setExpireDate] = useState<string>();
   const [enablePassword, setEnablePassword] = useState(false);
+  const [hideHeader, setHideHeader] = useState(false);
   const [shareLink, setShareLink] = useState<{
     password?: string;
     token?: string;
     usePassword?: boolean;
+    hideHeader?: boolean;
   }>();
 
   const handleCopyToClipboard = value => {
@@ -66,13 +69,12 @@ const ShareLinkModal: FC<{
       return '';
     }
     const encodeToken = encodeURIComponent(shareLink?.token);
-    return `${getServerDomain()}/share?token=${encodeToken}${
-      shareLink?.usePassword ? '&usePassword=1' : ''
-    }`;
+    return `${getServerDomain()}/share?token=${encodeToken}${shareLink?.usePassword ? '&usePassword=1' : ''
+      }${hideHeader ? '&showHeader=0' : ''}`;
   };
 
-  const handleGenerateShareLink = async (expireDate, enablePassword) => {
-    const result = await onGenerateShareLink?.(expireDate, enablePassword);
+  const handleGenerateShareLink = async (expireDate, enablePassword, hideHeader) => {
+    const result = await onGenerateShareLink?.(expireDate, enablePassword, hideHeader);
     setShareLink(result);
   };
 
@@ -109,12 +111,20 @@ const ShareLinkModal: FC<{
             }}
           />
         </FormItemEx>
+        <FormItemEx label={t('share.hideHeader')}>
+          <Checkbox
+            checked={hideHeader}
+            onChange={e => {
+              setHideHeader(e.target.checked);
+            }}
+          />
+        </FormItemEx>
         <FormItemEx label={t('share.generateLink')}>
           <Button
             htmlType="button"
             disabled={!expireDate}
             onClick={() =>
-              handleGenerateShareLink?.(expireDate, enablePassword)
+              handleGenerateShareLink?.(expireDate, enablePassword, hideHeader)
             }
           >
             {t('share.generateLink')}
@@ -158,12 +168,12 @@ const ShareLinkModal: FC<{
                     onClick={() =>
                       handleCopyToClipboard(
                         t('share.link') +
-                          `： ` +
-                          `${getFullShareLinkPath(shareLink)}` +
-                          `         ` +
-                          t('share.password') +
-                          `： ` +
-                          `${shareLink?.password}`,
+                        `： ` +
+                        `${getFullShareLinkPath(shareLink)}` +
+                        `         ` +
+                        t('share.password') +
+                        `： ` +
+                        `${shareLink?.password}`,
                       )
                     }
                   />

@@ -146,6 +146,8 @@ class ScoreChart extends Chart {
       }, {});
 
     return {
+      animation: true,
+      animationDuration: 3000,
       series: [
         {
           type: 'scatter',

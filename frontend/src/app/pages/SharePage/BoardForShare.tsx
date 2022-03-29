@@ -44,6 +44,7 @@ export interface ShareBoardProps {
   renderMode: VizRenderMode;
   filterSearchUrl: string;
   allowDownload: boolean;
+  showHeader: boolean;
   onLoadShareTask: OnLoadTasksType;
   onDownloadFile: (item: DownloadTask) => void;
   onMakeShareDownloadDataTask: (
@@ -58,6 +59,7 @@ export const BoardForShare: React.FC<ShareBoardProps> = memo(
     renderMode,
     filterSearchUrl,
     allowDownload,
+    showHeader,
     onMakeShareDownloadDataTask,
     onLoadShareTask,
     onDownloadFile,
@@ -123,12 +125,14 @@ export const BoardForShare: React.FC<ShareBoardProps> = memo(
           allowDownload={allowDownload}
         >
           <Wrapper>
+          {showHeader && (
             <TitleHeader onShareDownloadData={onShareDownloadData}>
               <DownloadTaskContainer
                 onLoadTasks={onLoadShareTask}
                 onDownloadFile={onDownloadFile}
               ></DownloadTaskContainer>
             </TitleHeader>
+           )}
             {boardType === 'auto' && <AutoBoardCore boardId={dashboard.id} />}
             {boardType === 'free' && <FreeBoardCore boardId={dashboard.id} />}
             <FullScreenPanel />

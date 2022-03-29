@@ -781,7 +781,8 @@
         "enablePassword": "Password",
         "generateLink": "Generate Link",
         "shareLink": "Share Link",
-        "downloadData": "Download Excel"
+        "downloadData": "Download Excel",
+        "hideHeader": "hide header"
       }
     },
     "board": {

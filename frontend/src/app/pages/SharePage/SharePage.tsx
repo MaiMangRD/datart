@@ -80,6 +80,10 @@ export function SharePage() {
   const usePassword = useRouteQuery({
     key: 'usePassword',
   });
+  const showHeader = useRouteQuery({
+    key: 'showHeader',
+  }) != "0";
+
   // in timed task eager=true for disable board lazyLoad
   const eager = useRouteQuery({
     key: 'eager',
@@ -210,6 +214,7 @@ export function SharePage() {
       {!Boolean(needPassword) && vizType === 'DASHBOARD' && shareBoard && (
         <BoardForShare
           dashboard={shareBoard}
+          showHeader={showHeader}
           allowDownload={true}
           onMakeShareDownloadDataTask={onMakeShareDownloadDataTask}
           renderMode={renderMode}
